@@ -11,7 +11,8 @@ export class LinkFactory {
      * @returns
      */
     public async createFromSeed(seed: string, startSats: number): Promise<Link> {
-        throw new Error("Exercise! Replace me to pass tests!");
+        const localSignature = await this.signer.sign(seed);
+        return new Link(seed, localSignature, startSats);
     }
 
     /**
@@ -25,6 +26,8 @@ export class LinkFactory {
      * @returns
      */
     public async createFromSettled(settled: Link): Promise<Link> {
-        throw new Error("Exercise! Replace me to pass tests!");
+        const localSignature = await this.signer.sign(settled.nextLinkId);
+        const minSats = Number(settled.invoice.valueSat) + 1;
+        return new Link(settled.nextLinkId, localSignature, minSats);
     }
 }
